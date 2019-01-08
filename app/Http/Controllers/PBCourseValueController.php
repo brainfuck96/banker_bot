@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\CurrService;
 
-class PBCourseValue extends Controller
+use App\Services\CurrService;
+use App\Http\Controllers\Controller;
+
+class PBCourseValueController extends Controller
 {
     public function showCourse($bot){
 
-        $bot->reply($this->currency);
+        $bot->reply($this->currency->getCurr());
 
 
     }
