@@ -8,5 +8,6 @@ $botman->hears('Hi', function ($bot) {
 });
 
 $botman->hears('/course', 'App\Http\Controllers\PBCourseValueController@showCourse');
+$botman->hears('/arhive', 'App\Http\Controllers\PBCourseValueController@showCourseArhive');
 
-$botman->hears('Start conversation', BotManController::class.'@startConversation');
+$botman->hears('/menu', BotManController::class.'@startConversation');

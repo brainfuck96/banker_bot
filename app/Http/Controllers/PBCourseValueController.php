@@ -2,22 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Services\CurrService;
 use App\Http\Controllers\Controller;
+use App\Services\CurrService;
 
 class PBCourseValueController extends Controller
 {
-    public function showCourse($bot){
+    public function __construct()
+    {
+
+        $this->currency = new CurrService();
+    }
+
+    public function showCourse($bot)
+    {
 
         $bot->reply($this->currency->getCurr());
 
+    }
+
+    public function showCourseArhive($bot)
+    {
+
+        $bot->reply($this->currency->getCurr());
 
     }
 
-    public function __construct(){
-        
-        $this->currency = new CurrService(); 
-    }
 }
