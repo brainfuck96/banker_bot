@@ -31,25 +31,22 @@ class ExampleConversation extends Conversation
                         $this->say((new App\Services\CurrService)->getCurr());
                         break;
                     case 'arhive':
-                        $this->askData(); //say((new App\Services\CurrService)->getCurr());
+                        $this->askData(); 
                         break;
                     case 'all':
                         $this->say((new App\Services\CurrService)->getCurr());
                         break;
                 }
-                // if ($answer->getValue() === 'joke') {
-                //     $joke = json_decode(file_get_contents('http://api.icndb.com/jokes/random'));
-                //     $this->say($joke->value->joke);
+
             } else {
                 $this->say(Inspiring::quote());
             }
-            //}
         });
     }
 
     public function askData()
     {
-        $this->ask('Enter data example  "19.10.2014" ', function (Answer $answer) {
+        $this->ask('Enter data for example  "19.10.2014" ', function (Answer $answer) {
             $date = $answer->getText();
 
             $this->say((new App\Services\CurrService)->getArhiveCurr($date));
