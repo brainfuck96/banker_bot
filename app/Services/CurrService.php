@@ -9,6 +9,7 @@ class CurrService
 
     const PBAPICURSE = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5';
     const PBARHIVE = 'https://api.privatbank.ua/p24api/exchange_rates?json&date=';
+    const ALLBANKSARHIVE = 'http://resources.finance.ua/ru/public/currency-cash.json';
     private $jdata;
     protected $client;
 
@@ -53,7 +54,7 @@ class CurrService
 
         try {
             //if($date)
-            $response = $this->connect(self::PBARHIVE.$date);
+            $response =  json_decode(file_get_contents(self::PBARHIVE.$date));//$this->connect(self::PBARHIVE.$date);
             $result = 'Course Privat Bank, DATA = ' . $date.PHP_EOL;
             $arrExchange = $response->exchangeRate;
 
@@ -65,10 +66,35 @@ class CurrService
                     $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
                     $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
                 }
-                else{
-                    $result = 'Incorrect DATA... Please try again';
-                }
+                // else{
+                //     $result = 'Incorrect DATA... Please try again';
+                // }
             }
+
+            return $result;
+
+        } catch (Exception $e) {
+
+            return 'An unexpected error. Please try again later or enter correct data';
+        }
+    }
+
+    public function getCurrAll($curr){
+        try {
+            //if($date)
+            $response =  json_decode(file_get_contents(self::ALLBANKSARHIVE));//$this->connect(self::PBARHIVE.$date);
+            $result = $curr.PHP_EOL;
+            // $arrExchange = $response->exchangeRate;
+
+            // foreach ($arrExchange as $arr) {
+            //     if ($arr->currency == "USD" || $arr->currency == "EUR" || $arr->currency == "RUB") {
+
+            //         $result .= '*******************' . PHP_EOL;
+            //         $result .= 'Curse ' . $arr->currency . PHP_EOL;
+            //         $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+            //         $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+            //     }
+            // }
 
             return $result;
 
