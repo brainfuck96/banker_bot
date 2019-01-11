@@ -2,10 +2,12 @@
 
 namespace App\Conversations;
 
+use App\Services\CurrAllBanksService;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Exception;
 use Illuminate\Foundation\Inspiring;
 
 class ExampleConversation extends Conversation
@@ -32,7 +34,7 @@ class ExampleConversation extends Conversation
                         $this->say((new App\Services\CurrService)->getCurr());
                         break;
                     case 'arhive':
-                        $this->askData(); 
+                        $this->askData();
                         break;
                     case 'all':
                         $this->askAllBanks();
@@ -56,36 +58,71 @@ class ExampleConversation extends Conversation
         });
     }
 
-    public function askAllBanks(){
+    public function askAllBanks()
+    {
         $question = Question::create("Choose currice")
             ->addButtons([
+                Button::create('ALL BANKs LIST')->value('list'),
                 Button::create('USD')->value('usd'),
                 Button::create('EUR')->value('eur'),
                 Button::create('RUB')->value('rub'),
                 Button::create('EXIT ')->value('exit'),
             ]);
-            return $this->ask($question, function (Answer $answer) {
-                if ($answer->isInteractiveMessageReply()) {
-                    switch ($answer->getValue()) {
-                        case 'usd':
-                            $this->say((new App\Services\CurrService)->getCurrAll('USD'));
-                            break;
-                        case 'eur':
-                            $this->say((new App\Services\CurrService)->getCurrAll('EUR')); 
-                            break;
-                        case 'rub':
-                            $this->say((new App\Services\CurrService)->getCurrAll('RUB'));
-                            break;
-                        case 'exit':
-                            break;
-                    }
-                
-                    // else {
-                    //     $this->say(Inspiring::quote());
-                    // }
-                
+        return $this->ask($question, function (Answer $answer) {
+            if ($answer->isInteractiveMessageReply()) {
+                switch ($answer->getValue()) {
+                    case 'list':
+                        $this->askBank();
+                        break;
+                    case 'usd':
+                        $this->say((new App\Services\CurrAllBanksService)->getSomeBank('USD'));
+                        break;
+                    case 'eur':
+                        $this->say((new App\Services\CurrAllBanksService)->getSomeBank('EUR'));
+                        break;
+                    case 'rub':
+                        $this->say((new App\Services\CurrAllBanksService)->getSomeBank('RUB'));
+                        break;
+                    case 'exit':
+                        break;
+                }
+
+                // else {
+                //     $this->say(Inspiring::quote());
+                // }
+
             }
         });
+    }
+
+    public function askBank()
+    {
+        try {
+            $banks = new CurrAllBanksService();
+            $list = $banks->getAllBanksList();
+            // $question = [];
+            foreach ($list as $org) {
+            // $arr_question[] = "Button::create($org->title)->value($org->oldId)";
+            // }
+                $question = Question::create("Choose currice")
+                    ->addButtons(
+                        [Button::create($org->title)->value($org->oldId),
+                         Button::create($org->title)->value($org->oldId)
+                        ]
+                    );
+                return $this->ask($question, function (Answer $answer) {
+                    if ($answer->isInteractiveMessageReply()) {
+                        $this->say((new App\Services\CurrAllBanksService)
+                                ->getSomeBank($answer->getValue(), 'USD'));
+                    }
+                });
+           }
+
+        } catch (Exception $e) {
+
+            $this->say(Inspiring::quote());
+        }
+
     }
 
     /**

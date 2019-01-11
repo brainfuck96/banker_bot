@@ -37,8 +37,9 @@ class CurrService
 
                 $result .= '*******************' . PHP_EOL;
                 $result .= 'Curse ' . $arr->ccy . PHP_EOL;
-                $result .= 'Buy = ' . round($arr->buy, 2) . ' ' . $arr->base_ccy . PHP_EOL;
                 $result .= 'Sale = ' . round($arr->sale, 2) . ' ' . $arr->base_ccy . PHP_EOL;
+                $result .= 'Buy = ' . round($arr->buy, 2) . ' ' . $arr->base_ccy . PHP_EOL;
+                
             }
 
             return $result;
@@ -63,8 +64,9 @@ class CurrService
 
                     $result .= '*******************' . PHP_EOL;
                     $result .= 'Curse ' . $arr->currency . PHP_EOL;
-                    $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
                     $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+                    $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+                    
                 }
                 // else{
                 //     $result = 'Incorrect DATA... Please try again';
@@ -79,29 +81,29 @@ class CurrService
         }
     }
 
-    public function getCurrAll($curr){
-        try {
-            //if($date)
-            $response =  json_decode(file_get_contents(self::ALLBANKSARHIVE));//$this->connect(self::PBARHIVE.$date);
-            $result = $curr.PHP_EOL;
-            // $arrExchange = $response->exchangeRate;
+    // public function getCurrAll($curr){
+    //     try {
+    //         //if($date)
+    //         $response =  json_decode(file_get_contents(self::ALLBANKSARHIVE));//$this->connect(self::PBARHIVE.$date);
+    //         $result = $curr.PHP_EOL;
+    //         // $arrExchange = $response->exchangeRate;
 
-            // foreach ($arrExchange as $arr) {
-            //     if ($arr->currency == "USD" || $arr->currency == "EUR" || $arr->currency == "RUB") {
+    //         // foreach ($arrExchange as $arr) {
+    //         //     if ($arr->currency == "USD" || $arr->currency == "EUR" || $arr->currency == "RUB") {
 
-            //         $result .= '*******************' . PHP_EOL;
-            //         $result .= 'Curse ' . $arr->currency . PHP_EOL;
-            //         $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
-            //         $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
-            //     }
-            // }
+    //         //         $result .= '*******************' . PHP_EOL;
+    //         //         $result .= 'Curse ' . $arr->currency . PHP_EOL;
+    //         //         $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+    //         //         $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+    //         //     }
+    //         // }
 
-            return $result;
+    //         return $result;
 
-        } catch (Exception $e) {
+    //     } catch (Exception $e) {
 
-            return 'An unexpected error. Please try again later or enter correct data';
-        }
-    }
+    //         return 'An unexpected error. Please try again later or enter correct data';
+    //     }
+    // }
 
 }
