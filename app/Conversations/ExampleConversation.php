@@ -17,13 +17,13 @@ class ExampleConversation extends Conversation
      */
     public function askReason()
     {
-        $question = Question::create("Exchange Rates Ukraine")
+        $question = Question::create("Exchange Rates Ukraine Banks")
         // ->fallback('Unable to ask question')
         // ->callbackId('ask_reason')
             ->addButtons([
-                Button::create('Live PB (quick)')->value('curse'),
-                Button::create('Arhive')->value('arhive'),
-                Button::create('Rates ALL UKR BANKs ')->value('all'),
+                Button::create('PrivatBank (quick)')->value('curse'),
+                Button::create('ALL UKR BANKs (Live) ')->value('all'),
+                Button::create('Arhive PB (from 01.01.2014)')->value('arhive'),
                 Button::create('EXIT ')->value('exit'),
             ]);
 
@@ -37,7 +37,7 @@ class ExampleConversation extends Conversation
                         $this->askData();
                         break;
                     case 'all':
-                        $this->askAllBanks();
+                        $this->askBank();
                         break;
                     case 'exit':
                         break;
@@ -58,43 +58,6 @@ class ExampleConversation extends Conversation
         });
     }
 
-    public function askAllBanks()
-    {
-        $question = Question::create("Choose currice")
-            ->addButtons([
-                Button::create('ALL BANKs LIST')->value('list'),
-                Button::create('USD')->value('usd'),
-                Button::create('EUR')->value('eur'),
-                Button::create('RUB')->value('rub'),
-                Button::create('EXIT ')->value('exit'),
-            ]);
-        return $this->ask($question, function (Answer $answer) {
-            if ($answer->isInteractiveMessageReply()) {
-                switch ($answer->getValue()) {
-                    case 'list':
-                        $this->askBank();
-                        break;
-                    case 'usd':
-                        $this->say((new App\Services\CurrAllBanksService)->getSomeBank('USD'));
-                        break;
-                    case 'eur':
-                        $this->say((new App\Services\CurrAllBanksService)->getSomeBank('EUR'));
-                        break;
-                    case 'rub':
-                        $this->say((new App\Services\CurrAllBanksService)->getSomeBank('RUB'));
-                        break;
-                    case 'exit':
-                        break;
-                }
-
-                // else {
-                //     $this->say(Inspiring::quote());
-                // }
-
-            }
-        });
-    }
-
     public function askBank()
     {
         try {
@@ -110,7 +73,7 @@ class ExampleConversation extends Conversation
             return $this->ask($question, function (Answer $answer) {
                 if ($answer->isInteractiveMessageReply()) {
                     $this->say(
-                        (new App\Services\CurrAllBanksService)->getSomeBank($answer->getValue(), 'USD')
+                        (new App\Services\CurrAllBanksService)->getSomeBank($answer->getValue())
                     );
                 }
             });
@@ -121,6 +84,43 @@ class ExampleConversation extends Conversation
         }
 
     }
+
+    // public function askAllBanks()
+    // {
+    //     $question = Question::create("Choose currice")
+    //         ->addButtons([
+    //             Button::create('ALL BANKs LIST')->value('list'),
+    //             Button::create('USD')->value('usd'),
+    //             Button::create('EUR')->value('eur'),
+    //             Button::create('RUB')->value('rub'),
+    //             Button::create('EXIT ')->value('exit'),
+    //         ]);
+    //     return $this->ask($question, function (Answer $answer) {
+    //         if ($answer->isInteractiveMessageReply()) {
+    //             switch ($answer->getValue()) {
+    //                 case 'list':
+    //                     $this->askBank();
+    //                     break;
+    //                 case 'usd':
+    //                     $this->say((new App\Services\CurrAllBanksService)->getSomeBank('USD'));
+    //                     break;
+    //                 case 'eur':
+    //                     $this->say((new App\Services\CurrAllBanksService)->getSomeBank('EUR'));
+    //                     break;
+    //                 case 'rub':
+    //                     $this->say((new App\Services\CurrAllBanksService)->getSomeBank('RUB'));
+    //                     break;
+    //                 case 'exit':
+    //                     break;
+    //             }
+
+    //             // else {
+    //             //     $this->say(Inspiring::quote());
+    //             // }
+
+    //         }
+    //     });
+    // }
 
     /**
      * Start the conversation
