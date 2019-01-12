@@ -100,23 +100,20 @@ class ExampleConversation extends Conversation
         try {
             $banks = new CurrAllBanksService();
             $list = $banks->getAllBanksList();
-            // $question = [];
+
+            $question = Question::create("Choose organization");
             foreach ($list as $org) {
-            // $arr_question[] = "Button::create($org->title)->value($org->oldId)";
-            // }
-                $question = Question::create("Choose currice")
-                    ->addButtons(
-                        [Button::create($org->title)->value($org->oldId),
-                         Button::create($org->title)->value($org->oldId)
-                        ]
+                $question->addButtons(
+                    [Button::create($org->title)->value($org->oldId),]
+                );
+            }
+            return $this->ask($question, function (Answer $answer) {
+                if ($answer->isInteractiveMessageReply()) {
+                    $this->say(
+                        (new App\Services\CurrAllBanksService)->getSomeBank($answer->getValue(), 'USD')
                     );
-                return $this->ask($question, function (Answer $answer) {
-                    if ($answer->isInteractiveMessageReply()) {
-                        $this->say((new App\Services\CurrAllBanksService)
-                                ->getSomeBank($answer->getValue(), 'USD'));
-                    }
-                });
-           }
+                }
+            });
 
         } catch (Exception $e) {
 
