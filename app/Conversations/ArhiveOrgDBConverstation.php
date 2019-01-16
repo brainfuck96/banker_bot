@@ -3,6 +3,7 @@
 namespace App\Conversations;
 
 use App\Services\CurrAllBanksService;
+use App\Services\CurrService;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -22,9 +23,9 @@ class ArhiveOrgDBConverstation extends Conversation
         return $this->ask($question, function (Answer $answer) {
             $year = $answer->getText();
             if ($year >= 2014 && $year <= 2018) {
-//                self::$data = [
-//                    'year' => $year,
-//                ];
+                self::$data = [
+                    'year' => $year,
+                ];
                 $this->askMonth();
             } else {
                 $this->askAgain();
@@ -34,44 +35,19 @@ class ArhiveOrgDBConverstation extends Conversation
     }
 
 
-    public  function askAgain(){
-
-        $question = Question::create('Error Incorrect Enter... Please try again')
-                    ->addButtons([
-                        Button::create('AGAIN?')->value('confirm'),
-                        Button::create('EXIT')->value('exit'),
-                    ]);
-
-                return $this->ask($question, function (Answer $answer) {
-                    if ($answer->isInteractiveMessageReply()) {
-                        switch ($answer->getValue()) {
-                            case 'confirm':
-                                $this->askDataArhive();
-                                break;
-                            case 'exit':
-                                break;
-                        }
-
-                    }
-                    else $this->say('Sorry this is ERROR');
-                });
-
-}
-
     public function askMonth()
     {
 //        $this->myear = $year;
 
-//        $question = Question::create('ENTER MOUTH  1 - 12 ');
-//        return
+//
              $this->ask('ENTER MOUTH  1 - 12 ', function (Answer $answer) {
                 $month = $answer->getText();
                 if ($month >= 1 && $month <= 12) {
-//                    self::$data .= [
-//                        'month' => $month,
-//                    ];
+                    self::$data = [
+                        'month' => $month,
+                    ];
 //                    $mydata = self::$data;
-                    $this->say("your data m: ");//askDay();
+                    $this->askDay();//say("your data m: ");//askDay();
                 } else {
                     $this->askAgain();
                 }
@@ -79,32 +55,78 @@ class ArhiveOrgDBConverstation extends Conversation
            // $this->say((new App\Services\CurrService)->getArhiveCurr($this->data));
     }
 
-    public function askBank()
+    public function askDay()
     {
-        try {
-            $banks = new CurrAllBanksService();
-            $list = $banks->getAllBanksList();
+//        $this->myear = $year;
 
-            $question = Question::create("Choose organization");
-            foreach ($list as $org) {
-                $question->addButtons(
-                    [Button::create($org->title)->value($org->id)]
-                );
+//
+        $this->ask('ENTER DAY  1 - 30 ', function (Answer $answer) {
+            $day = $answer->getText();
+            if ($day >= 1 && $day <= 30) {
+                    self::$data = [
+                        'day' => $day
+                    ];
+//                    $mydata = self::$data;
+              //  $data = ''.self::$data['day'].'.'.self::$data['month'].'.'.self::$data['year'];
+                $data  = self::$data['day'];
+  /*test*/      $this->say("your data $data");
+//                $this->say((new CurrService())->getArhiveCurr($data));
+                } else {
+                $this->askAgain();
             }
-            return $this->ask($question, function (Answer $answer) {
-                if ($answer->isInteractiveMessageReply()) {
-                    $this->say(
-                        (new App\Services\CurrAllBanksService)->getSomeBank($answer->getValue())
-                    );
+        });
+    }
+
+
+    public  function askAgain(){
+
+        $question = Question::create('Error Incorrect Enter... Please try again')
+            ->addButtons([
+                Button::create('AGAIN?')->value('confirm'),
+                Button::create('EXIT')->value('exit'),
+            ]);
+
+        return $this->ask($question, function (Answer $answer) {
+            if ($answer->isInteractiveMessageReply()) {
+                switch ($answer->getValue()) {
+                    case 'confirm':
+                        $this->askDataArhive();
+                        break;
+                    case 'exit':
+                        break;
                 }
-            });
 
-        } catch (Exception $e) {
-
-            $this->say(Inspiring::quote());
-        }
+            }
+            else $this->say('Sorry this is ERROR');
+        });
 
     }
+//    public function askBank()
+//    {
+//        try {
+//            $banks = new CurrAllBanksService();
+//            $list = $banks->getAllBanksList();
+//
+//            $question = Question::create("Choose organization");
+//            foreach ($list as $org) {
+//                $question->addButtons(
+//                    [Button::create($org->title)->value($org->id)]
+//                );
+//            }
+//            return $this->ask($question, function (Answer $answer) {
+//                if ($answer->isInteractiveMessageReply()) {
+//                    $this->say(
+//                        (new App\Services\CurrAllBanksService)->getSomeBank($answer->getValue())
+//                    );
+//                }
+//            });
+//
+//        } catch (Exception $e) {
+//
+//            $this->say(Inspiring::quote());
+//        }
+//
+//    }
 // public function askAgain($func)
     // {
     //     $question = Question::create("again?")->addButtons(
