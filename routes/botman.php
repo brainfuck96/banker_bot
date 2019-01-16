@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\BotManController;
+use App\Http\Controllers\OrganizationController;
 
 $botman = resolve('botman');
 
@@ -14,3 +15,7 @@ $botman->hears('/arhive', 'App\Http\Controllers\PBCourseValueController@showCour
 $botman->hears('/menu', BotManController::class.'@startConversation');
 
 $botman->hears('/start', BotManController::class.'@startConversation');
+
+$botman->hears('db', OrganizationController::class.'@mainMenu');
+
+$botman->hears('y', OrganizationController::class.'@ye');
