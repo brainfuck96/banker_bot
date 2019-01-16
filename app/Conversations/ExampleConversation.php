@@ -56,6 +56,7 @@ class ExampleConversation extends Conversation
 
             $this->say((new App\Services\CurrService)->getArhiveCurr($date));
         });
+
     }
 
     public function askBank()
@@ -67,7 +68,7 @@ class ExampleConversation extends Conversation
             $question = Question::create("Choose organization");
             foreach ($list as $org) {
                 $question->addButtons(
-                    [Button::create($org->title)->value($org->oldId),]
+                    [Button::create($org->title)->value($org->id)]
                 );
             }
             return $this->ask($question, function (Answer $answer) {
@@ -84,7 +85,26 @@ class ExampleConversation extends Conversation
         }
 
     }
+// public function askAgain($func)
+    // {
+    //     $question = Question::create("again?")->addButtons(
+    //         [Button::create('Continue')->value('continue'),
+    //             Button::create('EXIT')->value('exit'),
+    //         ]);
+    //     return $this->ask($question, function (Answer $answer) {
+    //         if ($answer->isInteractiveMessageReply()) {
+    //             switch ($answer->getValue()) {
+    //                 case 'continue':
+    //                     $this->$func;
+    //                     break;
+    //                 case 'exit':
+    //                     break;}
+    //         }else {
+    //             $this->say(Inspiring::quote());
+    //         }
+    //     });
 
+    // }
     // public function askAllBanks()
     // {
     //     $question = Question::create("Choose currice")

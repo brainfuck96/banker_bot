@@ -47,7 +47,7 @@ class CurrAllBanksService
            // $data = $this->getAllBanksList()->date;
             $result = 'Course Data: ' .$this->getData(). PHP_EOL;
             foreach ($allbanks as $bank) {
-                if ($bank->oldId == $some_org) {
+                if ($bank->id == $some_org) {
                     $result .= '**************************' . PHP_EOL;
                     $result .= 'Organization : ' . $bank->title . PHP_EOL;
                     foreach ($curentArray as $currenci) {
