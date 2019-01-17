@@ -1,0 +1,181 @@
+<?php
+
+namespace App\Conversations;
+
+use App\Organization;
+use App\Services\CurrAllBanksService;
+use App\Services\CurrService;
+use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use Exception;
+use Illuminate\Foundation\Inspiring;
+
+class AllBakcsDBConverstation extends Conversation
+{
+
+    public function AllBanksMenu(){
+
+        $question = Question::create("Exchange Rates Ukraine Banks")
+
+            ->addButtons([
+                Button::create('LIST')->value('list'),
+                Button::create('BEST OFFER ')->value('best'),
+                Button::create('<- BACK ')->value('back'),
+            ]);
+
+        return $this->ask($question, function (Answer $answer) {
+            if ($answer->isInteractiveMessageReply()) {
+                switch ($answer->getValue()) {
+                    case 'list':
+                        $this->askBank();
+                        break;
+                    case 'best':
+
+                        try{
+                            $this->bestOfferAskCur();
+                        }catch (Exception $e) {
+
+                            $this->say('Sorry somthen wrong');
+                        }
+
+                        break;
+                    case 'back':
+                        $this->bot->startConversation(new MainConversation());
+                        break;
+                }
+
+            } else {
+                $this->say("Sorry I'm understand.... Try enter Bottoms... ");
+            }
+        });
+    }
+
+    public function bestOfferAskCur(){
+
+        $arr_cur = ['USD' =>'usd_', 'EUR' =>'eur_','RUB' =>'rub_'];
+
+        $question = Question::create('CHOOSE CURRENCI  ');
+
+        foreach ($arr_cur as $cur=>$val_cur) {
+            $question->addButtons(
+                [Button::create($cur)->value($val_cur)] );
+        }
+
+        $question->addButtons([Button::create('<- BACK')->value('back')]);
+
+        return $this->ask($question, function (Answer $answer) {
+            if ($answer->isInteractiveMessageReply()) {
+                if ($answer->getValue() == 'back') {
+                    $this->bot->startConversation(new AllBakcsDBConverstation());
+                } else {
+                         $ans = $answer->getValue();
+                    try{
+                        $this->say($this->bestOffer($ans));
+                    }catch (Exception $e) {
+                        $this->say('Sorry somthen wrong');
+                    }
+                }
+            }
+        });
+
+    }
+
+    public function bestOffer($value){
+
+        $str_ask = $value.'ask';
+        $str_bid = $value.'bid';
+
+        $course = mb_strtoupper(trim($value, '_'));
+
+        $result = "******* min Course SALE $course *******".PHP_EOL;
+        $orgazations = Organization::all();
+        $orgazations = $orgazations->sortBy($str_ask)->take(5);
+        foreach ($orgazations as $bank){
+            $result .='-----------------------------'.PHP_EOL;
+            $result .= $bank->title. "  phone: (".$bank->phone.")".PHP_EOL;
+            $result .="Course $course" .PHP_EOL;
+            $result .= "Buy ".round($bank->$str_ask, 2)." UAH".PHP_EOL;
+            $result .= ''.PHP_EOL;
+           // $result .= " INFO (Data Update - ".$bank->date_bid.")".PHP_EOL;
+        }
+
+//        $orgazations = Organization::all();
+//        $orgazations = $orgazations->sortBy($str_bid)->take(3);
+//        foreach ($orgazations as $bank){
+//            $result .='**************************'.PHP_EOL;
+//            $result .= "Organization ".$bank->title.' phone: ('.$bank->phone.')'.PHP_EOL;
+//            $result .= "Course  BUY".$value.round($bank->$str_bid, 2)." UAH".PHP_EOL;
+//            $result .= ''.PHP_EOL;
+//        }
+
+        return $result;
+    }
+
+
+
+    public function askBank()
+    {
+
+            $organization = Organization::all();
+
+            $question = Question::create('Choose Bank  ');
+
+            foreach ($organization as $bank) {
+                $question->addButtons(
+                    [Button::create($bank->title)->value($bank->id)] );
+            }
+
+            return $this->ask($question, function (Answer $answer) {
+                if ($answer->isInteractiveMessageReply()) {
+                    $ans = $answer->getValue();
+
+                    try{
+                        $this->say($this->showCourse($ans));
+                    }catch (Exception $e) {
+
+                        $this->say('Sorry somthen wrong');
+                    }
+
+                }
+                else {
+                    $this->say("Sorry I'm understand.... Try enter Bottoms... ");
+                }
+            });
+
+
+    }
+
+    public function showCourse($org){
+
+        $organization = Organization::find($org);
+        $result = $organization->title. ' phone: ('.$organization->phone.')'.PHP_EOL;
+        $result .= "******************".PHP_EOL;
+        $result .= "Course USD".PHP_EOL;
+        $result .= "Buy ".$organization->usd_ask." UAH".PHP_EOL;
+        $result .= "Sale ".$organization->usd_bid." UAH".PHP_EOL;
+        $result .= "******************".PHP_EOL;
+        $result .= "Course EUR".PHP_EOL;
+        $result .= "Buy ".$organization->eur_ask." UAH".PHP_EOL;
+        $result .= "Sale ".$organization->eur_bid." UAH".PHP_EOL;
+        $result .= "******************".PHP_EOL;
+        $result .= "Course RUB".PHP_EOL;
+        $result .= "Buy ".$organization->rub_ask." UAH".PHP_EOL;
+        $result .= "Sale ".$organization->rub_bid." UAH".PHP_EOL;
+        $result .=" ".PHP_EOL;
+        $result .= " INFO (Data Update - ".$organization->date_bid.")".PHP_EOL;
+
+        return $result;
+
+}
+
+    /**
+     * Start the conversation
+     */
+    public function run()
+    {
+        //$this->askBank();
+        $this->AllBanksMenu();
+    }
+}

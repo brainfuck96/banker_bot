@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(MakeOrganizationSeeder::class);
+        //$this->call(MakeOrganizationSeeder::class);// make DB All Banks
+       $this->call(PBArhiveSeeder::class); // make Arhive
     }
 }

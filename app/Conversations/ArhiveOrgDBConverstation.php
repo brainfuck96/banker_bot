@@ -13,68 +13,150 @@ use Illuminate\Foundation\Inspiring;
 
 class ArhiveOrgDBConverstation extends Conversation
 {
-
-    public static $data;
-   // protected $myear;
+//public $data =['year', 'month', 'day'];
     public function askDataArhive()
     {
-        $question = Question::create('ENTER YEAR  2014 - 2018');
+        try{
+            $years = $this->rangeData(2014, 2018);
+            $question = Question::create('ENTER YEAR  ');
 
-        return $this->ask($question, function (Answer $answer) {
-            $year = $answer->getText();
-            if ($year >= 2014 && $year <= 2018) {
-                self::$data = [
-                    'year' => $year,
-                ];
-                $this->askMonth();
-            } else {
-                $this->askAgain();
+            foreach ($years as $year) {
+                $question->addButtons(
+                    [Button::create($year)->value($year)] );
             }
-        });
 
-    }
+            $question->addButtons([Button::create('<- BACK')->value('back')]);
 
+            return $this->ask($question, function (Answer $answer) {
+                if ($answer->isInteractiveMessageReply()) {
+                    if ($answer->getValue() == 'back') {
+                        $this->bot->startConversation(new MainConversation());
+                    } else {
 
-    public function askMonth()
-    {
-//        $this->myear = $year;
+                        $data['year']= $answer->getValue();
 
-//
-             $this->ask('ENTER MOUTH  1 - 12 ', function (Answer $answer) {
-                $month = $answer->getText();
-                if ($month >= 1 && $month <= 12) {
-                    self::$data = [
-                        'month' => $month,
-                    ];
-//                    $mydata = self::$data;
-                    $this->askDay();//say("your data m: ");//askDay();
-                } else {
-                    $this->askAgain();
+                        $this->askMonth($this->data);
+                    }
                 }
             });
-           // $this->say((new App\Services\CurrService)->getArhiveCurr($this->data));
+
+
+        }catch (Exception $e) {
+
+            $this->say('error data');
+        }
+
     }
 
-    public function askDay()
-    {
-//        $this->myear = $year;
+    public function rangeData($begin, $end){
 
-//
-        $this->ask('ENTER DAY  1 - 30 ', function (Answer $answer) {
-            $day = $answer->getText();
-            if ($day >= 1 && $day <= 30) {
-                    self::$data = [
-                        'day' => $day
-                    ];
-//                    $mydata = self::$data;
-              //  $data = ''.self::$data['day'].'.'.self::$data['month'].'.'.self::$data['year'];
-                $data  = self::$data['day'];
-  /*test*/      $this->say("your data $data");
-//                $this->say((new CurrService())->getArhiveCurr($data));
+        $arr = [];
+        foreach (range($begin, $end) as $num){
+            $arr[] = $num;
+        }
+
+        return $arr;
+    }
+
+
+    public function askMonth($tempdata)
+    {
+
+        $data['year'] = $tempdata['year'];
+        $arr_months = ['January', 'February', 'March', 'April',
+                        'May', 'June', 'July ', 'August',
+                       'September', 'October', 'November', 'December',];
+
+          $months = array_combine($this->rangeData(1, 12), $arr_months);
+
+        $question = Question::create('ENTER YEAR  ');
+
+        foreach ($months as $key_month=>$name_month) {
+            $question->addButtons(
+                [Button::create($name_month)->value($key_month)] );
+        }
+
+        $question->addButtons([Button::create('<- BACK')->value('back')]);
+
+        return $this->ask($question, function (Answer $answer) {
+            if ($answer->isInteractiveMessageReply()) {
+                if ($answer->getValue() == 'back') {
+                    $this->bot->startConversation(new ArhiveOrgDBConverstation());
                 } else {
-                $this->askAgain();
+
+                    $data ['month'] = $answer->getValue();
+
+                    $this->askDay($data);
+                }
             }
         });
+
+
+
+//
+//             $this->ask('ENTER MOUTH  1 - 12 ', function (Answer $answer) {
+//                $month = $answer->getText();
+//                if ($month >= 1 && $month <= 12) {
+//                    self::$data = [
+//                        'month' => $month,
+//                    ];
+////                    $mydata = self::$data;
+//                    $this->askDay();//say("your data m: ");//askDay();
+//                } else {
+//                    $this->askAgain();
+//                }
+//            });
+//           // $this->say((new App\Services\CurrService)->getArhiveCurr($this->data));
+    }
+
+    public function askDay($tempdata)////***********************not done
+    {
+        $data['year'] = $tempdata['year'];
+        $data['month'] = $tempdata['month'];
+
+       $days = $this->rangeData(1, 30);
+
+        $question = Question::create('ENTER YEAR  ');
+
+        foreach ($days as $day) {
+            $question->addButtons(
+                [Button::create($day)->value($day)] );
+        }
+
+        $question->addButtons([Button::create('<- BACK')->value('back')]);
+
+        return $this->ask($question, function (Answer $answer) {
+            if ($answer->isInteractiveMessageReply()) {
+                if ($answer->getValue() == 'back') {
+                    $this->bot->startConversation(new ArhiveOrgDBConverstation());
+                } else {
+
+                    $data ['day'] = $answer->getValue();
+
+                    $this->say("".$this->data['day'].'.');
+                }
+            }
+        });
+
+
+////        $this->myear = $year;
+//
+////
+//        $this->ask('ENTER DAY  1 - 30 ', function (Answer $answer) {
+//            $day = $answer->getText();
+//            if ($day >= 1 && $day <= 30) {
+//                    self::$data = [
+//                        'day' => $day
+//                    ];
+////                    $mydata = self::$data;
+//              //  $data = ''.self::$data['day'].'.'.self::$data['month'].'.'.self::$data['year'];
+//                $data  = self::$data['day'];
+//  /*test*/      $this->say("your data $data");
+////                $this->say((new CurrService())->getArhiveCurr($data));
+//                } else {
+//                $this->askAgain();
+//            }
+//        });
     }
 
 

@@ -24,7 +24,7 @@ class MainConversation extends Conversation{
                 // ->callbackId('ask_reason')
                 ->addButtons([
                     Button::create('PrivatBank (quick)')->value('curse'),
-                    // Button::create('ALL UKR BANKs (Live) ')->value('all'),
+                    Button::create('ALL UKR BANKs (Live) ')->value('all'),
                     Button::create('Arhive PB (from 01.01.2014)')->value('arh'),
                     Button::create('EXIT ')->value('exit'),
                 ]);
@@ -38,9 +38,9 @@ class MainConversation extends Conversation{
                         case 'arh':
                             $this->bot->startConversation(new ArhiveOrgDBConverstation());
                             break;
-//                    case 'all':
-//                        $this->askBank();
-//                        break;
+                            case 'all':
+                            $this->bot->startConversation(new AllBakcsDBConverstation());
+                        break;
                         case 'exit':
                             break;
                     }

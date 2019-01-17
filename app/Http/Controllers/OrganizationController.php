@@ -14,9 +14,9 @@ class OrganizationController extends Controller
         $bot->startConversation(new MainConversation());
     }
 
-    public function ye(BotMan $bot){
-        //$str = new showDBListService();
-        $bot->reply('aae');//$str->showDB());
-    }
+//    public function ye(BotMan $bot){
+//        //$str = new showDBListService();
+//        $bot->reply('aae');//$str->showDB());
+//    }
 
 }
