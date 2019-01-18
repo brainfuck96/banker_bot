@@ -23,8 +23,8 @@ class MainConversation extends Conversation{
                 // ->fallback('Unable to ask question')
                 // ->callbackId('ask_reason')
                 ->addButtons([
-                    Button::create('PrivatBank (quick)')->value('curse'),
-                    Button::create('ALL UKR BANKs (Live) ')->value('all'),
+                   // Button::create('PrivatBank (quick)')->value('curse'),
+                    Button::create('ALL UKR BANKs  ')->value('all'),
                     Button::create('Arhive PB (from 01.01.2014)')->value('arh'),
                     Button::create('EXIT ')->value('exit'),
                 ]);
@@ -32,9 +32,9 @@ class MainConversation extends Conversation{
             return $this->ask($question, function (Answer $answer) {
                 if ($answer->isInteractiveMessageReply()) {
                     switch ($answer->getValue()) {
-                        case 'curse':
-                            $this->say((new App\Services\CurrService)->getCurr());
-                            break;
+//                        case 'curse':
+//                            $this->say((new App\Services\CurrService)->getCurr());
+//                            break;
                         case 'arh':
                             $this->bot->startConversation(new ArhiveOrgDBConverstation());
                             break;
@@ -54,17 +54,8 @@ class MainConversation extends Conversation{
 
             $this->say('Upsssss )');
         }
-        }
 
-//    public function dbList(){
-//
-//        $baza = Organization::all();
-//        $result = "DB List ".PHP_EOL;
-//        foreach ($baza as $bank){
-//            $result .= $bank->title.PHP_EOL;
-//        }
-//        $this->say($result);
-//    }
+    }
 
     public function run()
     {

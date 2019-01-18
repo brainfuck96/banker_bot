@@ -18,4 +18,4 @@ $botman->hears('/start', BotManController::class.'@startConversation');
 
 $botman->hears('db', OrganizationController::class.'@mainMenu');
 
-$botman->hears('y', OrganizationController::class.'@ye');
+//$botman->hears('y', OrganizationController::class.'@ye');

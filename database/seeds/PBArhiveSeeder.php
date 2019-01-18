@@ -13,8 +13,8 @@ class PBArhiveSeeder extends Seeder
     public function run()
     {
         $years = $this->rangeData(2017, 2017);
-        $months =$this->rangeData(3, 3);
-        $days = $this->rangeData(9, 31);
+        $months =$this->rangeData(4, 12);
+        $days = $this->rangeData(1, 31);
 
         //DB::table('privat_bank_arhives')->delete();
 
@@ -41,28 +41,14 @@ class PBArhiveSeeder extends Seeder
                                         'purchase' => $org->purchaseRate,
                                     ];
                                 }
-                                // else {
-                                //     $coll['rub'] = [
-                                //         'data' => $arrAll->date,
-                                //         'sale' => null,
-                                //         'purchase' => null,
-                                //     ];
 
-                                // }
                                 if ($org->currency == "USD" && isset($org->saleRate)) {
                                     $coll['usd'] = [
                                         'sale' => $org->saleRate,
                                         'purchase' => $org->purchaseRate,
                                     ];
                                 }
-                                // else {
 
-                                //     $coll['usd'] = [
-                                //         'data' => $arrAll->date,
-                                //         'sale' => null,
-                                //         'purchase' => null,
-                                //     ];
-                                // }
 
                                 if ($org->currency == "EUR" && isset($org->saleRate)) {
                                     $coll['eur'] = [
@@ -70,13 +56,7 @@ class PBArhiveSeeder extends Seeder
                                         'purchase' => $org->purchaseRate,
                                     ];
                                 }
-                                // else {
-                                //     $coll['eur'] = [
-                                //         'data' => $arrAll->date,
-                                //         'sale' => null,
-                                //         'purchase' => null,
-                                //     ];
-                                // }
+
 
 }
                             }
