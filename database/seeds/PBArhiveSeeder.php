@@ -12,9 +12,9 @@ class PBArhiveSeeder extends Seeder
      */
     public function run()
     {
-        $years = $this->rangeData(2014, 2018);
-        $months =$this->rangeData(1, 12);
-        $days = $this->rangeData(1, 31);
+        $years = $this->rangeData(2017, 2017);
+        $months =$this->rangeData(3, 3);
+        $days = $this->rangeData(9, 31);
 
         //DB::table('privat_bank_arhives')->delete();
 

@@ -2,21 +2,32 @@
 
 namespace App\Conversations;
 
+use App\DataArh;
+use App\PrivatBankArhive;
+
 use App\Services\CurrAllBanksService;
 use App\Services\CurrService;
+use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Exception;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Foundation\Inspiring;
 
 class ArhiveOrgDBConverstation extends Conversation
 {
-//public $data =['year', 'month', 'day'];
+
+
     public function askDataArhive()
     {
-        try{
+        $user = User::firstOrCreate([
+            'chat_id'=>$this->bot->getUser()->getId()]);
+
+        $data = DataArh::firstOrCreate([
+            'user_id'=>$user->id,]);
+
             $years = $this->rangeData(2014, 2018);
             $question = Question::create('ENTER YEAR  ');
 
@@ -32,19 +43,33 @@ class ArhiveOrgDBConverstation extends Conversation
                     if ($answer->getValue() == 'back') {
                         $this->bot->startConversation(new MainConversation());
                     } else {
+                             try{
 
-                        $data['year']= $answer->getValue();
+                                 $user = User::updateOrCreate([
+                                     'chat_id'=>$this->bot->getUser()->getId()]);
 
-                        $this->askMonth();
+                                 $data = DataArh::updateOrCreate([
+                                     'user_id'=>$user->id],
+                                     ['year' => $answer->getValue(),
+                                 ]);
+//
+                                 $data->save();
+                                // $user()->save();
+
+
+                                 $this->askMonth();
+                                 }
+
+                                 catch (Exception $e) {
+
+                                        $this->say('error data');
+                             }
                     }
                 }
             });
 
 
-        }catch (Exception $e) {
 
-            $this->say('error data');
-        }
 
     }
 
@@ -84,13 +109,23 @@ class ArhiveOrgDBConverstation extends Conversation
                     $this->bot->startConversation(new ArhiveOrgDBConverstation());
                 } else {
 
-                    $data ['month'] = $answer->getValue();
 
                     try{
+                        $user = User::updateOrCreate([
+                            'chat_id'=>$this->bot->getUser()->getId()]);
+//
+                        $data = DataArh::updateOrCreate(
+                            ['user_id'=>$user->id],
+                        [
+                            'month' => $answer->getValue(),
+                        ]);
+                        $data->save();
+
                         $this->askDay();
                     }catch (Exception $e) {
 
-                        $this->say('error day_method');
+                        $this->say('error day_method ');
+
                     }
 
 
@@ -98,28 +133,10 @@ class ArhiveOrgDBConverstation extends Conversation
             }
         });
 
-
-
-//
-//             $this->ask('ENTER MOUTH  1 - 12 ', function (Answer $answer) {
-//                $month = $answer->getText();
-//                if ($month >= 1 && $month <= 12) {
-//                    self::$data = [
-//                        'month' => $month,
-//                    ];
-////                    $mydata = self::$data;
-//                    $this->askDay();//say("your data m: ");//askDay();
-//                } else {
-//                    $this->askAgain();
-//                }
-//            });
-//           // $this->say((new App\Services\CurrService)->getArhiveCurr($this->data));
     }
 
-    public function askDay()////***********************not done
+    public function askDay()
     {
-//        $data['year'] = $tempdata['year'];
-//        $data['month'] = $tempdata['month'];
 
        $days = $this->rangeData(1, 31);
 
@@ -138,32 +155,30 @@ class ArhiveOrgDBConverstation extends Conversation
                     $this->bot->startConversation(new ArhiveOrgDBConverstation());
                 } else {
 
-                   // $data ['day'] = $answer->getValue();
 
-                    $this->say($answer->getValue());
+                    $user = User::updateOrCreate([
+                        'chat_id'=>$this->bot->getUser()->getId()]);
+//
+                    $data = DataArh::updateOrCreate(
+                        ['user_id'=>$user->id],
+                        [
+                            'day' => $answer->getValue(),
+                        ]);
+                    $data->save();
+
+                    $url = ''.$data->day.'.'.$data->month.'.'.$data->year;
+                   // $this->say($url);
+                    try{$this->say((new App\Services\CurrService)->getArhiveCurr($url));}
+                    catch (Exception $e) {
+
+                        $this->say('error day_method ');
+                        // $data->delete();
+                    }
+
                 }
             }
         });
 
-
-////        $this->myear = $year;
-//
-////
-//        $this->ask('ENTER DAY  1 - 30 ', function (Answer $answer) {
-//            $day = $answer->getText();
-//            if ($day >= 1 && $day <= 30) {
-//                    self::$data = [
-//                        'day' => $day
-//                    ];
-////                    $mydata = self::$data;
-//              //  $data = ''.self::$data['day'].'.'.self::$data['month'].'.'.self::$data['year'];
-//                $data  = self::$data['day'];
-//  /*test*/      $this->say("your data $data");
-////                $this->say((new CurrService())->getArhiveCurr($data));
-//                } else {
-//                $this->askAgain();
-//            }
-//        });
     }
 
 
@@ -190,88 +205,6 @@ class ArhiveOrgDBConverstation extends Conversation
         });
 
     }
-//    public function askBank()
-//    {
-//        try {
-//            $banks = new CurrAllBanksService();
-//            $list = $banks->getAllBanksList();
-//
-//            $question = Question::create("Choose organization");
-//            foreach ($list as $org) {
-//                $question->addButtons(
-//                    [Button::create($org->title)->value($org->id)]
-//                );
-//            }
-//            return $this->ask($question, function (Answer $answer) {
-//                if ($answer->isInteractiveMessageReply()) {
-//                    $this->say(
-//                        (new App\Services\CurrAllBanksService)->getSomeBank($answer->getValue())
-//                    );
-//                }
-//            });
-//
-//        } catch (Exception $e) {
-//
-//            $this->say(Inspiring::quote());
-//        }
-//
-//    }
-// public function askAgain($func)
-    // {
-    //     $question = Question::create("again?")->addButtons(
-    //         [Button::create('Continue')->value('continue'),
-    //             Button::create('EXIT')->value('exit'),
-    //         ]);
-    //     return $this->ask($question, function (Answer $answer) {
-    //         if ($answer->isInteractiveMessageReply()) {
-    //             switch ($answer->getValue()) {
-    //                 case 'continue':
-    //                     $this->$func;
-    //                     break;
-    //                 case 'exit':
-    //                     break;}
-    //         }else {
-    //             $this->say(Inspiring::quote());
-    //         }
-    //     });
-
-    // }
-    // public function askAllBanks()
-    // {
-    //     $question = Question::create("Choose currice")
-    //         ->addButtons([
-    //             Button::create('ALL BANKs LIST')->value('list'),
-    //             Button::create('USD')->value('usd'),
-    //             Button::create('EUR')->value('eur'),
-    //             Button::create('RUB')->value('rub'),
-    //             Button::create('EXIT ')->value('exit'),
-    //         ]);
-    //     return $this->ask($question, function (Answer $answer) {
-    //         if ($answer->isInteractiveMessageReply()) {
-    //             switch ($answer->getValue()) {
-    //                 case 'list':
-    //                     $this->askBank();
-    //                     break;
-    //                 case 'usd':
-    //                     $this->say((new App\Services\CurrAllBanksService)->getSomeBank('USD'));
-    //                     break;
-    //                 case 'eur':
-    //                     $this->say((new App\Services\CurrAllBanksService)->getSomeBank('EUR'));
-    //                     break;
-    //                 case 'rub':
-    //                     $this->say((new App\Services\CurrAllBanksService)->getSomeBank('RUB'));
-    //                     break;
-    //                 case 'exit':
-    //                     break;
-    //             }
-
-    //             // else {
-    //             //     $this->say(Inspiring::quote());
-    //             // }
-
-    //         }
-    //     });
-    // }
 
     /**
      * Start the conversation
