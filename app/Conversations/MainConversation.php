@@ -20,11 +20,9 @@ class MainConversation extends Conversation{
     {
         try{
             $question = Question::create("Exchange Rates Ukraine Banks")
-                // ->fallback('Unable to ask question')
-                // ->callbackId('ask_reason')
+
                 ->addButtons([
-                   // Button::create('PrivatBank (quick)')->value('curse'),
-                    Button::create('ALL UKR BANKs  ')->value('all'),
+                    Button::create('ALL UKR BANKs stable ')->value('all'),
                     Button::create('Arhive PB (from 01.01.2014)')->value('arh'),
                     Button::create('EXIT ')->value('exit'),
                 ]);

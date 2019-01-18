@@ -101,17 +101,9 @@ class AllBakcsDBConverstation extends Conversation
            // $result .= " INFO (Data Update - ".$bank->date_bid.")".PHP_EOL;
         }
 
-//        $orgazations = Organization::all();
-//        $orgazations = $orgazations->sortBy($str_bid)->take(3);
-//        foreach ($orgazations as $bank){
-//            $result .='**************************'.PHP_EOL;
-//            $result .= "Organization ".$bank->title.' phone: ('.$bank->phone.')'.PHP_EOL;
-//            $result .= "Course  BUY".$value.round($bank->$str_bid, 2)." UAH".PHP_EOL;
-//            $result .= ''.PHP_EOL;
-//        }
-
         return $result;
     }
+
 
 
 

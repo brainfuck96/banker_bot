@@ -167,12 +167,17 @@ class ArhiveOrgDBConverstation extends Conversation
                     $data->save();
 
                     $url = ''.$data->day.'.'.$data->month.'.'.$data->year;
-                   // $this->say($url);
-                    try{$this->say((new App\Services\CurrService)->getArhiveCurr($url));}
-                    catch (Exception $e) {
+                    if(null !== 'https://api.privatbank.ua/p24api/exchange_rates?json&date='.$url){
+                        try{
+                            $this->say((new App\Services\CurrService)->getArhiveCurr($url));}
+                        catch (Exception $e) {
 
-                        $this->say('error day_method ');
-                        // $data->delete();
+                            $this->say('error day_method ');
+                    }
+
+                    }else{
+                        $this->say('Sorry there is no archive for this date...Try again ');
+                        $this->bot->startConversation(new ArhiveOrgDBConverstation());
                     }
 
                 }
@@ -182,29 +187,29 @@ class ArhiveOrgDBConverstation extends Conversation
     }
 
 
-    public  function askAgain(){
-
-        $question = Question::create('Error Incorrect Enter... Please try again')
-            ->addButtons([
-                Button::create('AGAIN?')->value('confirm'),
-                Button::create('EXIT')->value('exit'),
-            ]);
-
-        return $this->ask($question, function (Answer $answer) {
-            if ($answer->isInteractiveMessageReply()) {
-                switch ($answer->getValue()) {
-                    case 'confirm':
-                        $this->askDataArhive();
-                        break;
-                    case 'exit':
-                        break;
-                }
-
-            }
-            else $this->say('Sorry this is ERROR');
-        });
-
-    }
+//    public  function askAgain(){
+//
+//        $question = Question::create('Error Incorrect Enter... Please try again')
+//            ->addButtons([
+//                Button::create('AGAIN?')->value('confirm'),
+//                Button::create('EXIT')->value('exit'),
+//            ]);
+//
+//        return $this->ask($question, function (Answer $answer) {
+//            if ($answer->isInteractiveMessageReply()) {
+//                switch ($answer->getValue()) {
+//                    case 'confirm':
+//                        $this->askDataArhive();
+//                        break;
+//                    case 'exit':
+//                        break;
+//                }
+//
+//            }
+//            else $this->say('Sorry this is ERROR');
+//        });
+//
+//    }
 
     /**
      * Start the conversation
