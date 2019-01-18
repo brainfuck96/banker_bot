@@ -16,7 +16,7 @@ class PBArhiveSeeder extends Seeder
         $months =$this->rangeData(1, 12);
         $days = $this->rangeData(1, 31);
 
-        DB::table('privat_bank_arhives')->delete();
+        //DB::table('privat_bank_arhives')->delete();
 
 
         foreach ($years as $year){
@@ -32,9 +32,11 @@ class PBArhiveSeeder extends Seeder
                             $curr = $arrAll->exchangeRate;
 
                             foreach ($curr as $org) {
+
+                                if(isset($org->currency)){
+
                                 if ($org->currency == "RUB" && isset($org->saleRate)) {
                                     $coll['rub'] = [
-                                        'data' => $arrAll->date,
                                         'sale' => $org->saleRate,
                                         'purchase' => $org->purchaseRate,
                                     ];
@@ -49,7 +51,6 @@ class PBArhiveSeeder extends Seeder
                                 // }
                                 if ($org->currency == "USD" && isset($org->saleRate)) {
                                     $coll['usd'] = [
-                                        'data' => $arrAll->date,
                                         'sale' => $org->saleRate,
                                         'purchase' => $org->purchaseRate,
                                     ];
@@ -65,7 +66,6 @@ class PBArhiveSeeder extends Seeder
 
                                 if ($org->currency == "EUR" && isset($org->saleRate)) {
                                     $coll['eur'] = [
-                                        'data' => $arrAll->date,
                                         'sale' => $org->saleRate,
                                         'purchase' => $org->purchaseRate,
                                     ];
@@ -78,11 +78,14 @@ class PBArhiveSeeder extends Seeder
                                 //     ];
                                 // }
 
-
+}
                             }
 
                             PrivatBankArhive::create(array(
                                 'data' => $arrAll->date,
+                                'day' =>$day,
+                                'month'=>$month,
+                                'year'=>$year,
                                 'baseCurrencyLit'=>$arrAll->baseCurrencyLit,
                                 'usd_sale' => $coll['usd']['sale'],
                                 'usd_purchase' => $coll['usd']['purchase'],

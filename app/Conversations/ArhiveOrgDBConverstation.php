@@ -35,7 +35,7 @@ class ArhiveOrgDBConverstation extends Conversation
 
                         $data['year']= $answer->getValue();
 
-                        $this->askMonth($this->data);
+                        $this->askMonth();
                     }
                 }
             });
@@ -59,17 +59,17 @@ class ArhiveOrgDBConverstation extends Conversation
     }
 
 
-    public function askMonth($tempdata)
+    public function askMonth()
     {
 
-        $data['year'] = $tempdata['year'];
+        //$data['year'] = $tempdata['year'];
         $arr_months = ['January', 'February', 'March', 'April',
                         'May', 'June', 'July ', 'August',
                        'September', 'October', 'November', 'December',];
 
           $months = array_combine($this->rangeData(1, 12), $arr_months);
 
-        $question = Question::create('ENTER YEAR  ');
+        $question = Question::create('ENTER MONTH  ');
 
         foreach ($months as $key_month=>$name_month) {
             $question->addButtons(
@@ -86,7 +86,14 @@ class ArhiveOrgDBConverstation extends Conversation
 
                     $data ['month'] = $answer->getValue();
 
-                    $this->askDay($data);
+                    try{
+                        $this->askDay();
+                    }catch (Exception $e) {
+
+                        $this->say('error day_method');
+                    }
+
+
                 }
             }
         });
@@ -109,14 +116,14 @@ class ArhiveOrgDBConverstation extends Conversation
 //           // $this->say((new App\Services\CurrService)->getArhiveCurr($this->data));
     }
 
-    public function askDay($tempdata)////***********************not done
+    public function askDay()////***********************not done
     {
-        $data['year'] = $tempdata['year'];
-        $data['month'] = $tempdata['month'];
+//        $data['year'] = $tempdata['year'];
+//        $data['month'] = $tempdata['month'];
 
-       $days = $this->rangeData(1, 30);
+       $days = $this->rangeData(1, 31);
 
-        $question = Question::create('ENTER YEAR  ');
+        $question = Question::create('ENTER DAY  ');
 
         foreach ($days as $day) {
             $question->addButtons(
@@ -131,9 +138,9 @@ class ArhiveOrgDBConverstation extends Conversation
                     $this->bot->startConversation(new ArhiveOrgDBConverstation());
                 } else {
 
-                    $data ['day'] = $answer->getValue();
+                   // $data ['day'] = $answer->getValue();
 
-                    $this->say("".$this->data['day'].'.');
+                    $this->say($answer->getValue());
                 }
             }
         });

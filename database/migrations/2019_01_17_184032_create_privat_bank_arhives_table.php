@@ -16,6 +16,9 @@ class CreatePrivatBankArhivesTable extends Migration
         Schema::create('privat_bank_arhives', function (Blueprint $table) {
             $table->increments('id');
             $table->string('data');
+            $table->string('day');
+            $table->string('month');
+            $table->string('year');
             $table->string('baseCurrencyLit');
             $table->string('usd_sale');
             $table->string('usd_purchase');
