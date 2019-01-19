@@ -3,6 +3,7 @@
 namespace App\Conversations;
 
 use App\DataArh;
+use App\PrivatBankArhive;
 use App\Services\CurrService;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -75,7 +76,6 @@ class ArhiveOrgDBConverstation extends Conversation
     public function askMonth()
     {
 
-        //$data['year'] = $tempdata['year'];
         $arr_months = ['January', 'February', 'March', 'April',
             'May', 'June', 'July ', 'August',
             'September', 'October', 'November', 'December'];
@@ -125,6 +125,7 @@ class ArhiveOrgDBConverstation extends Conversation
     {
 
         $days = $this->rangeData(1, 31);
+   //     $days = $this->checkDate();
 
         $question = Question::create('ENTER DAY  ');
 
@@ -169,6 +170,23 @@ class ArhiveOrgDBConverstation extends Conversation
         });
 
     }
+
+//    public function checkDate(){
+////        $user = User::updateOrCreate([
+////            'chat_id' => $this->bot->getUser()->getId()]);
+//       //$dataArh = DataArh::find(1);
+//        $arhivePB = PrivatBankArhive::find(1);//find(id,2);//where('id', 1)->first();// 'AND', 'year', 2015)->first();
+//        $result = [];
+//        //$arrDay = DataArh::all()
+//        //$days = $this->rangeData(1, 31);
+//        foreach ($arhivePB->day as $day) {
+//
+//            $result = $day;
+//
+//        }
+//
+//        return $result;
+//    }
 
 //    public  function askAgain(){
     //

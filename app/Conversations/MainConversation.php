@@ -20,22 +20,21 @@ class MainConversation extends Conversation
                 ->addButtons([
                     Button::create('ALL UKR BANKs stable ')->value('all'),
                     Button::create('Arhive PB (from 01.01.2014)')->value('arh'),
-                    Button::create('EXIT ')->value('exit'),
+                    Button::create('<- BACK ')->value('back'),
                 ]);
 
             return $this->ask($question, function (Answer $answer) {
                 if ($answer->isInteractiveMessageReply()) {
                     switch ($answer->getValue()) {
-//                        case 'curse':
-                        //                            $this->say((new App\Services\CurrService)->getCurr());
-                        //                            break;
+
                         case 'arh':
                             $this->bot->startConversation(new ArhiveOrgDBConverstation());
                             break;
                         case 'all':
                             $this->bot->startConversation(new AllBakcsDBConverstation());
                             break;
-                        case 'exit':
+                        case 'back':
+                            $this->bot->startConversation(new ExampleConversation());
                             break;
                     }
 

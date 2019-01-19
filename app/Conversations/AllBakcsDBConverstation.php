@@ -89,14 +89,28 @@ class AllBakcsDBConverstation extends Conversation
 
         $course = mb_strtoupper(trim($value, '_'));
 
-        $result = "******* min Course SALE $course *******" . PHP_EOL;
+        $result = $this->showOffer($str_ask, $course, 'BUY');
+        $result.=$this->showOffer($str_bid, $course,'SALE');
+
+        return $result;
+    }
+
+    private function showOffer($str, $course, $ask){
+
+        $result = "********* Best Course for $ask $course **********" . PHP_EOL;
         $orgazations = Organization::all();
-        $orgazations = $orgazations->sortBy($str_ask)->take(5);
+        if($ask == 'BUY'){
+            $orgazations = $orgazations->sortBy($str)->take(10);
+        }else{
+
+            $orgazations = $orgazations->sortByDesc($str)->take(10);
+        }
+
         foreach ($orgazations as $bank) {
             $result .= '-----------------------------' . PHP_EOL;
             $result .= $bank->title . "  phone: (" . $bank->phone . ")" . PHP_EOL;
             $result .= "Course $course" . PHP_EOL;
-            $result .= "Buy " . round($bank->$str_ask, 2) . " UAH" . PHP_EOL;
+            $result .= "  " . round($bank->$str, 2) . " UAH" . PHP_EOL;
             $result .= '' . PHP_EOL;
             // $result .= " INFO (Data Update - ".$bank->date_bid.")".PHP_EOL;
         }

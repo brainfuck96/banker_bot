@@ -25,6 +25,42 @@ class CurrService
         return $this->jdata;
     }
 
+    public function getColCurr(){
+        $response = $this->connect(self::PBAPICURSE);
+        $arrCur = [];
+        foreach ($response as $cur){
+            $arrCur[] = $cur->ccy;
+        }
+
+        return $arrCur;
+    }
+
+    public function getAllCollectionCurr(){
+
+        return $this->connect(self::PBAPICURSE);
+
+    }
+
+    public function getConversValue($value, $cur, $ask){
+
+       $arrAll = $this->getAllCollectionCurr();
+
+        foreach ($arrAll as $arr){
+
+            if($arr->ccy == $cur){
+                $num = round($arr->$ask, 2);
+                //if($ask == 'b')
+                $prod = round($value*$num, 2);
+                $baseCur = $arr->base_ccy;
+            }
+        }
+        $result = "$value $cur= $prod $baseCur".PHP_EOL;
+        $result .= "official course PrivatBank".PHP_EOL;
+        $result .= "1 $cur = $num $baseCur ".PHP_EOL;
+        return $result;
+
+    }
+
     public function getCurr()
     {
 

@@ -4,12 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-
-class DataArh extends Model
+class Conversion extends Model
 {
     //
     protected $fillable = [
-        'user_id', 'day', 'month', 'year',
+        'user_id', 'cur', 'ask', 'temp',
     ];
 
     public function user()

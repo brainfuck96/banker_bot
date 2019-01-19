@@ -22,6 +22,7 @@ class ExampleConversation extends Conversation
             ->addButtons([
                 Button::create('PrivatBank (quick)')->value('curse'),
                 Button::create('ALL UKR BANKs (Live) ')->value('all'),
+                Button::create('Conversion (quick)')->value('convers'),
                 Button::create('More ...')->value('more'),
                 Button::create('EXIT ')->value('exit'),
             ]);
@@ -37,6 +38,9 @@ class ExampleConversation extends Conversation
                         break;
                     case 'all':
                         $this->askBank();
+                        break;
+                    case 'convers':
+                        $this->bot->startConversation(new ConversionConverstation());
                         break;
                     case 'exit':
                         break;
