@@ -40,12 +40,10 @@ class CurrService
         return $arrCur;
     }
 
-    
-
     public function getConversValue($value, $cur, $ask)
     {
         $arrAll = $this->getAllCollectionCurr();
-        
+
         foreach ($arrAll as $arr) {
 
             if ($arr->ccy == $cur) {
@@ -97,13 +95,15 @@ class CurrService
             $arrExchange = $response->exchangeRate;
 
             foreach ($arrExchange as $arr) {
-                if ($arr->currency == "USD" || $arr->currency == "EUR" || $arr->currency == "RUB") {
 
-                    $result .= '*******************' . PHP_EOL;
-                    $result .= 'Curse ' . $arr->currency . PHP_EOL;
-                    $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
-                    $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+                if (isset($arr->saleRate)) {
+                    if ($arr->currency == "USD" || $arr->currency == "EUR" || $arr->currency == "RUB") {
 
+                        $result .= '*******************' . PHP_EOL;
+                        $result .= 'Curse ' . $arr->currency . PHP_EOL;
+                        $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+                        $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
+                    }
                 }
                 // else{
                 //     $result = 'Incorrect DATA... Please try again';
