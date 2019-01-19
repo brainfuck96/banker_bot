@@ -3,7 +3,6 @@
 namespace App\Conversations;
 
 use App\Conversion;
-use App\Organization;
 use App\Services\CurrService;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -33,10 +32,10 @@ class ConversionConverstation extends Conversation
 
         return $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
-                if($answer->getValue() == 'back'){
+                if ($answer->getValue() == 'back') {
                     $this->bot->startConversation(new ExampleConversation());
-                }else{
-                    try{
+                } else {
+                    try {
                         $user = User::updateOrCreate([
                             'chat_id' => $this->bot->getUser()->getId()]);
 
@@ -48,7 +47,7 @@ class ConversionConverstation extends Conversation
                         $cur_val->save();
 
                         $this->askCurr();
-                    }catch (Exception $e) {
+                    } catch (Exception $e) {
 
                         $this->say('Sorry somthen wrong');
                     }
@@ -61,18 +60,17 @@ class ConversionConverstation extends Conversation
         });
     }
 
-    public function askCurr()//($value)
+    public function askCurr() //($value)
+
     {
 
         $arr_cur = (new CurrService())->getColCurr();
-
         $question = Question::create('CHOOSE CURRENCI  ');
 
         foreach ($arr_cur as $cur) {
-
             $question->addButtons(
-                [Button::create($cur)->value($cur)//value(($cur)+$value)
-              ]);
+                [Button::create($cur)->value($cur), //value(($cur)+$value)
+                ]);
         }
 
         $question->addButtons([Button::create('<- BACK')->value('back')]);
@@ -95,8 +93,7 @@ class ConversionConverstation extends Conversation
                         $cur_val->save();
 
                         $this->convDialog();
-                    } catch (Exception $e)
-                    {
+                    } catch (Exception $e) {
                         $this->say('Sorry somthen wrong');
                     }
                 }
@@ -105,12 +102,12 @@ class ConversionConverstation extends Conversation
 
     }
 
+    public function convDialog()
+    {
 
-    public function convDialog(){
+        $this->ask('Enter numbers:', function (Answer $answer) {
 
-        $this->ask('Enter numbers:', function (Answer $answer){
-
-            try{
+            try {
                 $user = User::updateOrCreate([
                     'chat_id' => $this->bot->getUser()->getId()]);
 
@@ -122,8 +119,7 @@ class ConversionConverstation extends Conversation
                 $cur_val->save();
 
                 $this->say((new CurrService())->getConversValue($cur_val->temp, $cur_val->cur, $cur_val->ask));
-            }catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 $this->say('Sorry wrong numbers .... Try enter numbers and \'.\'for example 100 or 200.30 ');
 
             }
@@ -131,7 +127,6 @@ class ConversionConverstation extends Conversation
         });
 
     }
-
 
     /**
      * Start the conversation

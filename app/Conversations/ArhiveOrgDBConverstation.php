@@ -3,7 +3,6 @@
 namespace App\Conversations;
 
 use App\DataArh;
-use App\PrivatBankArhive;
 use App\Services\CurrService;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -45,9 +44,8 @@ class ArhiveOrgDBConverstation extends Conversation
 
                         $data = DataArh::updateOrCreate([
                             'user_id' => $user->id],
-                            ['year' => $answer->getValue(),
-                            ]);
-//
+                            ['year' => $answer->getValue()]);
+
                         $data->save();
                         // $user()->save();
 
@@ -100,11 +98,11 @@ class ArhiveOrgDBConverstation extends Conversation
                     try {
                         $user = User::updateOrCreate([
                             'chat_id' => $this->bot->getUser()->getId()]);
-//
+
                         $data = DataArh::updateOrCreate(
                             ['user_id' => $user->id],
                             [
-                                'month' => $answer->getValue(),
+                             'month' => $answer->getValue(),
                             ]);
                         $data->save();
 
@@ -125,7 +123,7 @@ class ArhiveOrgDBConverstation extends Conversation
     {
 
         $days = $this->rangeData(1, 31);
-   //     $days = $this->checkDate();
+        //     $days = $this->checkDate();
 
         $question = Question::create('ENTER DAY  ');
 
@@ -148,7 +146,7 @@ class ArhiveOrgDBConverstation extends Conversation
                     $data = DataArh::updateOrCreate(
                         ['user_id' => $user->id],
                         [
-                            'day' => $answer->getValue(),
+                         'day' => $answer->getValue(),
                         ]);
                     $data->save();
 
@@ -172,21 +170,21 @@ class ArhiveOrgDBConverstation extends Conversation
     }
 
 //    public function checkDate(){
-////        $user = User::updateOrCreate([
-////            'chat_id' => $this->bot->getUser()->getId()]);
-//       //$dataArh = DataArh::find(1);
-//        $arhivePB = PrivatBankArhive::find(1);//find(id,2);//where('id', 1)->first();// 'AND', 'year', 2015)->first();
-//        $result = [];
-//        //$arrDay = DataArh::all()
-//        //$days = $this->rangeData(1, 31);
-//        foreach ($arhivePB->day as $day) {
-//
-//            $result = $day;
-//
-//        }
-//
-//        return $result;
-//    }
+    ////        $user = User::updateOrCreate([
+    ////            'chat_id' => $this->bot->getUser()->getId()]);
+    //       //$dataArh = DataArh::find(1);
+    //        $arhivePB = PrivatBankArhive::find(1);//find(id,2);//where('id', 1)->first();// 'AND', 'year', 2015)->first();
+    //        $result = [];
+    //        //$arrDay = DataArh::all()
+    //        //$days = $this->rangeData(1, 31);
+    //        foreach ($arhivePB->day as $day) {
+    //
+    //            $result = $day;
+    //
+    //        }
+    //
+    //        return $result;
+    //    }
 
 //    public  function askAgain(){
     //

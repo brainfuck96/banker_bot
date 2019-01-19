@@ -90,18 +90,19 @@ class AllBakcsDBConverstation extends Conversation
         $course = mb_strtoupper(trim($value, '_'));
 
         $result = $this->showOffer($str_ask, $course, 'BUY');
-        $result.=$this->showOffer($str_bid, $course,'SALE');
+        $result .= $this->showOffer($str_bid, $course, 'SALE');
 
         return $result;
     }
 
-    private function showOffer($str, $course, $ask){
+    private function showOffer($str, $course, $ask)
+    {
 
         $result = "********* Best Course for $ask $course **********" . PHP_EOL;
         $orgazations = Organization::all();
-        if($ask == 'BUY'){
+        if ($ask == 'BUY') {
             $orgazations = $orgazations->sortBy($str)->take(10);
-        }else{
+        } else {
 
             $orgazations = $orgazations->sortByDesc($str)->take(10);
         }
