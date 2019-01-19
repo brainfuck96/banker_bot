@@ -156,16 +156,16 @@ class AllBakcsDBConverstation extends Conversation
         $result = $organization->title . ' phone: (' . $organization->phone . ')' . PHP_EOL;
         $result .= "******************" . PHP_EOL;
         $result .= "Course USD" . PHP_EOL;
-        $result .= "Buy " . $organization->usd_ask . " UAH" . PHP_EOL;
-        $result .= "Sale " . $organization->usd_bid . " UAH" . PHP_EOL;
+        $result .= "Buy " . round($organization->usd_ask, 2) . " UAH" . PHP_EOL;
+        $result .= "Sale " . round($organization->usd_bid, 2) . " UAH" . PHP_EOL;
         $result .= "******************" . PHP_EOL;
         $result .= "Course EUR" . PHP_EOL;
-        $result .= "Buy " . $organization->eur_ask . " UAH" . PHP_EOL;
-        $result .= "Sale " . $organization->eur_bid . " UAH" . PHP_EOL;
+        $result .= "Buy " . round($organization->eur_ask, 2) . " UAH" . PHP_EOL;
+        $result .= "Sale " . round($organization->eur_bid, 2) . " UAH" . PHP_EOL;
         $result .= "******************" . PHP_EOL;
         $result .= "Course RUB" . PHP_EOL;
-        $result .= "Buy " . $organization->rub_ask . " UAH" . PHP_EOL;
-        $result .= "Sale " . $organization->rub_bid . " UAH" . PHP_EOL;
+        $result .= "Buy " . round($organization->rub_ask, 2) . " UAH" . PHP_EOL;
+        $result .= "Sale " . round($organization->rub_bid, 2) . " UAH" . PHP_EOL;
         $result .= " " . PHP_EOL;
         $result .= " INFO (Data Update - " . $organization->date_bid . ")" . PHP_EOL;
 
