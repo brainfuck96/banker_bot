@@ -2,23 +2,19 @@
 
 namespace App\Conversations;
 
-use App\Organization;
-use App\Services\CurrAllBanksService;
-use App\Services\showDBListService;
-use BotMan\BotMan\BotMan;
+use App\Conversations\ArhiveOrgDBConverstation;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Exception;
-use Illuminate\Foundation\Inspiring;
-use App\Conversations\ArhiveOrgDBConverstation;
 
-class MainConversation extends Conversation{
+class MainConversation extends Conversation
+{
 
     public function askReason()
     {
-        try{
+        try {
             $question = Question::create("Exchange Rates Ukraine Banks")
 
                 ->addButtons([
@@ -31,14 +27,14 @@ class MainConversation extends Conversation{
                 if ($answer->isInteractiveMessageReply()) {
                     switch ($answer->getValue()) {
 //                        case 'curse':
-//                            $this->say((new App\Services\CurrService)->getCurr());
-//                            break;
+                        //                            $this->say((new App\Services\CurrService)->getCurr());
+                        //                            break;
                         case 'arh':
                             $this->bot->startConversation(new ArhiveOrgDBConverstation());
                             break;
-                            case 'all':
+                        case 'all':
                             $this->bot->startConversation(new AllBakcsDBConverstation());
-                        break;
+                            break;
                         case 'exit':
                             break;
                     }
@@ -47,8 +43,7 @@ class MainConversation extends Conversation{
                     $this->say('wrong enter');
                 }
             });
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
 
             $this->say('Upsssss )');
         }

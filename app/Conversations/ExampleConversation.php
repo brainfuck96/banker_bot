@@ -48,7 +48,6 @@ class ExampleConversation extends Conversation
         });
     }
 
-
     public function askBank()
     {
         try {

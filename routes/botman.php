@@ -12,10 +12,10 @@ $botman->hears('/help', function ($bot) {
 $botman->hears('/show', 'App\Http\Controllers\PBCourseValueController@showCourse');
 $botman->hears('/arhive', 'App\Http\Controllers\PBCourseValueController@showCourseArhive');
 
-$botman->hears('/menu', BotManController::class.'@startConversation');
+$botman->hears('/menu', BotManController::class . '@startConversation');
 
-$botman->hears('/start', BotManController::class.'@startConversation');
+$botman->hears('/start', BotManController::class . '@startConversation');
 
-$botman->hears('db', OrganizationController::class.'@mainMenu');
+$botman->hears('db', OrganizationController::class . '@mainMenu');
 
 //$botman->hears('y', OrganizationController::class.'@ye');

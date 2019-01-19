@@ -39,7 +39,7 @@ class CurrService
                 $result .= 'Curse ' . $arr->ccy . PHP_EOL;
                 $result .= 'Sale = ' . round($arr->sale, 2) . ' ' . $arr->base_ccy . PHP_EOL;
                 $result .= 'Buy = ' . round($arr->buy, 2) . ' ' . $arr->base_ccy . PHP_EOL;
-                
+
             }
 
             return $result;
@@ -55,8 +55,8 @@ class CurrService
 
         try {
             //if($date)
-            $response =  json_decode(file_get_contents(self::PBARHIVE.$date));//$this->connect(self::PBARHIVE.$date);
-            $result = 'Course Privat Bank, DATA = ' . $date.PHP_EOL;
+            $response = json_decode(file_get_contents(self::PBARHIVE . $date)); //$this->connect(self::PBARHIVE.$date);
+            $result = 'Course Privat Bank, DATA = ' . $date . PHP_EOL;
             $arrExchange = $response->exchangeRate;
 
             foreach ($arrExchange as $arr) {
@@ -66,7 +66,7 @@ class CurrService
                     $result .= 'Curse ' . $arr->currency . PHP_EOL;
                     $result .= 'Sale = ' . round($arr->saleRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
                     $result .= 'Buy = ' . round($arr->purchaseRate, 2) . ' ' . $arr->baseCurrency . PHP_EOL;
-                    
+
                 }
                 // else{
                 //     $result = 'Incorrect DATA... Please try again';
