@@ -65,7 +65,7 @@ class ConversionConverstation extends Conversation
     {
 
         $arr_cur = (new CurrService())->getColCurr();
-        $question = Question::create('CHOOSE CURRENCI  ');
+        $question = Question::create('SELECTe CURRENCY  ');
 
         foreach ($arr_cur as $cur) {
             $question->addButtons(

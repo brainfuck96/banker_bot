@@ -102,7 +102,7 @@ class ArhiveOrgDBConverstation extends Conversation
                         $data = DataArh::updateOrCreate(
                             ['user_id' => $user->id],
                             [
-                             'month' => $answer->getValue(),
+                                'month' => $answer->getValue(),
                             ]);
                         $data->save();
 
@@ -146,7 +146,7 @@ class ArhiveOrgDBConverstation extends Conversation
                     $data = DataArh::updateOrCreate(
                         ['user_id' => $user->id],
                         [
-                         'day' => $answer->getValue(),
+                            'day' => $answer->getValue(),
                         ]);
                     $data->save();
 

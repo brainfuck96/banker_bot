@@ -15,7 +15,7 @@ class MainConversation extends Conversation
     public function askReason()
     {
         try {
-            $question = Question::create("Exchange Rates Ukraine Banks")
+            $question = Question::create("More MENU ")
 
                 ->addButtons([
                     Button::create('ALL UKR BANKs stable ')->value('all'),
